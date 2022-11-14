@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState } from "react";
 import Post from "../../components/Post/Post";
 import { Button, Modal, Form } from 'react-bootstrap'
+import Header from "../../components/Header/Header";
 
 const Home = () => {
     let datta = JSON.parse(localStorage.getItem("userLogged"))
@@ -84,7 +85,8 @@ const Home = () => {
     }
     return (
         <>
-            <h1>Bienvenido {user.nombre_usuario}!</h1>
+            <Header />
+            <h1>Bienvenido !</h1>
             <hr />
             <Button variant="primary" onClick={handleShow}>
                 Crear Post
@@ -121,11 +123,14 @@ const Home = () => {
             <hr />
             <h2>Estos son tus posts:</h2>
             <div className="posts">
-                {posts.map((post, index) => <Post post={post} key={index} />
+                {/* {posts.map((post, index) => <Post post={post} key={index} />
 
 
 
-                )}
+                )} */}
+                <Post />
+                <Post />
+                <Post />
             </div>
         </>
     )

@@ -1,5 +1,5 @@
 import axios from "axios";
-
+import { Button, Form, Container } from "react-bootstrap";
 import "./Index.css"
 const Index = () => {
 
@@ -45,8 +45,31 @@ const Index = () => {
     }
 
     return (
-        <>
-            <form className="formulario_registro" onSubmit={registrarUsuario}>
+        <Container className=" mt-4 pl-3 pr-3">
+            <h1 className="text-center">Meety</h1>
+            <Form onSubmit={registrarUsuario}>
+                <div className="loading">
+                    <div className="lds-dual-ring"></div>
+                </div>
+                <Form.Group className="mb-3" controlId="nombre_usuario">
+                    <Form.Label>Nombre</Form.Label>
+                    <Form.Control type="text" placeholder="Joe Doe" required />
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="email_usuario">
+                    <Form.Label>Email</Form.Label>
+                    <Form.Control type="email" placeholder="joe@123.com" required />
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="nick_usuario">
+                    <Form.Label>Nickname</Form.Label>
+                    <Form.Control type="text" placeholder="JoeDoe21" required />
+                </Form.Group>
+
+
+                <Button variant="primary" type="submit" className="button btn-block w-100 mt-2">
+                    Registrar
+                </Button>
+            </Form>
+            {/* <form className="formulario_registro" onSubmit={registrarUsuario}>
                 <div className="loading">
                     <div className="lds-dual-ring"></div>
                 </div>
@@ -58,8 +81,8 @@ const Index = () => {
                 <label htmlFor="nick_usuario">Nombre de usuario</label>
                 <input type="text" name="nick_usuario" id="nick_usuario" required />
                 <button type="submit">Registrarse</button>
-            </form>
-        </>
+            </form> */}
+        </Container>
     )
 }
 

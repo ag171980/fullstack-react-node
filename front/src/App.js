@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import './App.css';
 import axios from 'axios';
+
 import Post from './components/Post/Post'
 
 import RouterPage from './router/RouterPage';
@@ -62,7 +63,9 @@ function App() {
   // }, [stateBlogs])
 
   return (
-    <RouterPage />
+    <div style={{background:"#F6F6F6"}}>
+      <RouterPage />
+    </div>
   );
 }
 

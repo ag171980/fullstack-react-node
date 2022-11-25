@@ -12,7 +12,7 @@ const Login = () => {
             email_usuario: document.querySelector("#email_usuario").value,
         }
         //registro de datos
-        const resp = await axios.post("http://localhost:8000/validarUsuario", data)
+        const resp = await axios.post("http://localhost:8000/.netlify/functions/api/validarUsuario", data)
             .then((res) => {
                 console.log(res.data)
                 setTimeout(() => {
@@ -43,7 +43,7 @@ const Login = () => {
     }
 
     return (
-        <Container className=" mt-4 pl-3 pr-3">
+        <Container className="login pt-4 pl-3 pr-3 col-3">
             <h1 className="text-center">Meety</h1>
             <Form onSubmit={validarUsuario}>
                 <div className="loading">

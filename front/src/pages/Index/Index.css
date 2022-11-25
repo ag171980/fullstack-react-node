@@ -1,5 +1,8 @@
 /* @import url("../../css/loader.css"); */
 
+.index{
+    height: 100vh;
+}
 .formulario_registro {
     display: flex;
     flex-direction: column;

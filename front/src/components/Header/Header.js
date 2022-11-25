@@ -5,7 +5,7 @@ const Header = () => {
     return (
         <header className="header d-flex flex-direction-row justify-content-between align-items-center bg-dark p-2">
             <h2>Meety</h2>
-            <Form className="d-flex">
+            {/* <Form className="d-flex">
                 <Form.Control
                     type="search"
                     placeholder="Search"
@@ -13,7 +13,7 @@ const Header = () => {
                     aria-label="Search"
                 />
                 <Button variant="outline-success">Search</Button>
-            </Form>
+            </Form> */}
             <div className="menu">
                 <Link to="/home" >Home</Link>
                 <Link to="/home" >Chats</Link>

@@ -3,9 +3,11 @@ import { useState } from "react";
 import Post from "../../components/Post/Post";
 import { Button, Modal, Form } from 'react-bootstrap'
 import Header from "../../components/Header/Header";
+import Profile from '../../assets/profile.jpg'
 
 const Home = () => {
     let datta = JSON.parse(localStorage.getItem("userLogged"))
+
     const [posts, setPosts] = useState([]);
     const [statePosts, setStatePosts] = useState(false);
     const [user, setUser] = useState(datta)
@@ -15,13 +17,24 @@ const Home = () => {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
+    const obtenerNick = async (idUsuario) => {
+        const nickname = await axios.get(`http://localhost:8000/.netlify/functions/api/users/${idUsuario}`)
+        return nickname.data.nick_usuario
+    }
+
     const obtenerPosts = async () => {
         try {
-            const response = await axios.get(`http://localhost:8000/.netlify/functions/api/posts/${datta.id}`)
+            let response = await axios.get(`http://localhost:8000/.netlify/functions/api/posts/${datta.id}`)
+
             if (response.status === 200) {
+                let nick = await obtenerNick(response.data[0].id_user)
+
+
+
                 setPosts([])
                 setStatePosts(true)
                 response.data.forEach(element => {
+                    element.nick = nick
                     setPosts(posts => [...posts, element])
                 });
                 return true;
@@ -44,13 +57,13 @@ const Home = () => {
             updatedAt: todayDate
         }
 
-        const resp = await axios.post("http://localhost:8000/.netlify/functions/api/crearPost", data, {
+        await axios.post("http://localhost:8000/.netlify/functions/api/crearPost", data, {
             headers: {
                 "Content-Type": "multipart/form-data",
             }
         })
             .then((res) => {
-                console.log(res.data)
+                // console.log(res.data)
                 obtenerPosts()
                 // setTimeout(() => {
                 //     if (res.status === 200 && !res.data.message) {
@@ -84,9 +97,9 @@ const Home = () => {
         obtenerPosts()
     }
     return (
-        <>
-            <Header />
-            <h1>Bienvenido !</h1>
+        <div className="Home">
+            {/* <Header /> */}
+            {/* <h1>Bienvenido !</h1>
             <hr />
             <Button variant="primary" onClick={handleShow}>
                 Crear Post
@@ -121,18 +134,75 @@ const Home = () => {
 
             </Modal>
             <hr />
-            <h2>Estos son tus posts:</h2>
-            <div className="posts">
-                {/* {posts.map((post, index) => <Post post={post} key={index} />
+            <h2>Estos son tus posts:</h2> */}
 
 
+            <div className="sidebar">
+                <div className="logo">
+                    <h1>SocialApp</h1>
+                </div>
+                <div className="navigate-social">
+                    <div className="link">
+                        <a>Feed</a>
+                    </div>
+                    <div className="link">
+                        <a>Messages</a>
+                    </div>
+                    <div className="link">
+                        <a>Friends</a>
+                    </div>
+                    <div className="link">
+                        <a>My Profile</a>
+                    </div>
+                    <div className="link">
+                        <a>Logout</a>
+                    </div>
+                    <div className="link">
+                        <a>New Post</a>
+                    </div>
+                </div>
 
-                )} */}
-                <Post />
-                <Post />
-                <Post />
             </div>
-        </>
+            <div className="feed">
+                <div className="posts">
+                    {posts.map((post, index) => <Post post={post} key={index} />)}
+                </div>
+
+            </div>
+            <div className="profile-suggestions">
+                <div className="my-profile">
+                    <img src={Profile} height="70" style={{ borderRadius: "50px" }} />
+                    <div className="data-profile">
+                        <h2>my nickname</h2>
+                        <p>my name</p>
+                    </div>
+                </div>
+                <div className="suggestions">
+                    <div className="profile-suggest">
+                        <img src={Profile} height="70" style={{ borderRadius: "50px" }} />
+                        <div className="data-profile">
+                            <h3>my nickname</h3>
+                            <p>my name</p>
+                        </div>
+                    </div>
+                    <div className="profile-suggest">
+                        <img src={Profile} height="70" style={{ borderRadius: "50px" }} />
+                        <div className="data-profile">
+                            <h3>my nickname</h3>
+                            <p>my name</p>
+                        </div>
+                    </div>
+                    <div className="profile-suggest">
+                        <img src={Profile} height="70" style={{ borderRadius: "50px" }} />
+                        <div className="data-profile">
+                            <h3>my nickname</h3>
+                            <p>my name</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
     )
 }
 

@@ -45,7 +45,7 @@ const Index = () => {
     }
 
     return (
-        <Container className=" mt-4 pl-3 pr-3">
+        <Container className="index pt-4 pl-3 pr-3 col-3">
             <h1 className="text-center">Meety</h1>
             <Form onSubmit={registrarUsuario}>
                 <div className="loading">
@@ -69,19 +69,7 @@ const Index = () => {
                     Registrar
                 </Button>
             </Form>
-            {/* <form className="formulario_registro" onSubmit={registrarUsuario}>
-                <div className="loading">
-                    <div className="lds-dual-ring"></div>
-                </div>
-                <h2>Registrate</h2>
-                <label htmlFor="nombre_usuario">Nombre</label>
-                <input type="text" name="nombre_usuario" id="nombre_usuario" required />
-                <label htmlFor="email_usuario">Email</label>
-                <input type="email" name="email_usuario" id="email_usuario" required />
-                <label htmlFor="nick_usuario">Nombre de usuario</label>
-                <input type="text" name="nick_usuario" id="nick_usuario" required />
-                <button type="submit">Registrarse</button>
-            </form> */}
+            
         </Container>
     )
 }

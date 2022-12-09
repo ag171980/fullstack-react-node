@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Home from '../pages/Home/Home'
 import Index from '../pages/Index/Index'
 import Login from '../pages/Login/Login'
+import Profile from '../pages/Profile/Profile'
 
 export default function RouterPage() {
     return (
@@ -14,7 +15,8 @@ export default function RouterPage() {
                     <Route path="/" element={<Index />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/home" element={<Home />} />
-                </Routes>
+                    <Route path="/:nickname" element={<Profile />} />
+                </Routes>   
             </Router>
         </div>
     )

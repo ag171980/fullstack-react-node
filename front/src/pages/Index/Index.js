@@ -1,6 +1,7 @@
 import axios from "axios";
 import { Button, Form, Container } from "react-bootstrap";
 import "./Index.css"
+import {Link} from 'react-router-dom'
 const Index = () => {
 
     const registrarUsuario = async (e) => {
@@ -68,6 +69,7 @@ const Index = () => {
                 <Button variant="primary" type="submit" className="button btn-block w-100 mt-2">
                     Registrar
                 </Button>
+                <Link to='/login'>o Iniciar Sesion</Link>
             </Form>
             
         </Container>

@@ -6,6 +6,9 @@ import Post from './components/Post/Post'
 
 import RouterPage from './router/RouterPage';
 function App() {
+  
+
+  
   // const [blogs, setBlogs] = useState([]);
   // const [stateBlogs, setStateBlogs] = useState(false);
 
@@ -63,7 +66,7 @@ function App() {
   // }, [stateBlogs])
 
   return (
-    <div style={{background:"#F6F6F6"}}>
+    <div style={{background:"#ebf7ff"}}>
       <RouterPage />
     </div>
   );

@@ -55,6 +55,18 @@ const Home = () => {
   //     return false
   //   }
   // }
+
+  const obtenerPostsDeUsuariosQueSigo = async () => {
+    const response = await axios.get(
+      `http://localhost:8000/.netlify/functions/api/posts/showPostsFromUsersIFollow/${datta.nick_usuario}`
+    )
+
+    if (response.status === 200) {
+      setPosts(response.data)
+      setStatePosts(true)
+      console.log(response.data)
+    }
+  }
   const crearPost = async e => {
     e.preventDefault()
     var todayDate = new Date().toISOString().slice(0, 10)
@@ -83,7 +95,6 @@ const Home = () => {
         //         <p>Iniciaste sesion correctamente!</p>
         //     </div>
         //     `
-
         //         localStorage.setItem("userLogged", JSON.stringify(res.data))
         //     } else {
         //         document.querySelector(".loading").innerHTML = `
@@ -104,7 +115,7 @@ const Home = () => {
   }
 
   if (!statePosts) {
-    // obtenerPosts()
+    obtenerPostsDeUsuariosQueSigo()
   }
   return (
     <div className='Home'>
@@ -149,7 +160,6 @@ const Home = () => {
 
         <Col xxl={2}>
           <Sidebar />
-          
         </Col>
         <Col xxl={8} className='posts'>
           {posts.map((post, index) => (

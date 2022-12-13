@@ -8,6 +8,7 @@ import PhotoDefault from '../../assets/default.jpg'
 
 import './Search.css'
 const Search = () => {
+  let datta = JSON.parse(localStorage.getItem('userLogged'))
   const [loader, setLoader] = useState(false)
   const [usersFound, setUsersFound] = useState([])
   const [userToSearch, setUserToSearch] = useState('')
@@ -56,15 +57,23 @@ const Search = () => {
         <Col xxl={2}></Col>
         <Col xxl={10}>
           {usersFound &&
-            usersFound.map(user => (
-              <div className='user'>
-                <img src={PhotoDefault} className='photo-user' />
-                <Link to={`/${user.nick_usuario}`} className='info-user'>
-                  <h4>{user.nick_usuario}</h4>
-                  <p>{user.nombre_usuario}</p>
-                </Link>
-              </div>
-            ))}
+            usersFound.map(
+              user =>
+                user.nick_usuario !== datta.nick_usuario && (
+                  <div className='user'>
+                    <img src={PhotoDefault} className='photo-user' />
+                    <Link to={`/${user.nick_usuario}`} className='info-user'>
+                      <h4>{user.nick_usuario}</h4>
+                      <p>{user.nombre_usuario}</p>
+                    </Link>
+                  </div>
+                )
+            )}
+          {usersFound.length === 0 && (
+            <p className='text-center'>
+              there are not users named: <b>{userToSearch}</b>
+            </p>
+          )}
         </Col>
       </Row>
     </Container>

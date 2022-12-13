@@ -11,7 +11,7 @@ const Post = ({ post }) => {
             <div className='head-post'>
                 <div className='data-poster p-2'>
                     <img src={require(`../../posts/${post.imagen_post}`)} className="profile" />
-                    <p className='mx-2'>{post.nick}</p>
+                    <p className='mx-2'>{post.nick_usuario}</p>
                 </div>
                 <div className='actions-post'></div>
             </div>
@@ -19,7 +19,7 @@ const Post = ({ post }) => {
                 <img src={require(`../../posts/${post.imagen_post}`)} className="image-post" />
             </div>
             <div className='footer-post p-2'>
-                <b><p>{post.nick}</p></b>
+                <b><p>{post.nick_usuario}</p></b>
                 {/* <Link to={`/users/${id}`}>
                     <b><p>Johny Foons</p></b>
                 </Link> */}

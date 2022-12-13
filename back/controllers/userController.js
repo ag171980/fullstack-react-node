@@ -21,7 +21,7 @@ export const getUserById = async (req, res) => {
     res.json({ message: error.message })
   }
 }
-
+//buscador
 export const findByNickname = async (req, res) => {
   //   console.log(req.params.nickname)
   try {
@@ -41,6 +41,7 @@ export const findByNickname = async (req, res) => {
 }
 
 export const crearUsuario = async (req, res) => {
+  console.log(req.file)
   try {
     const userExists = await UserModel.findOne({
       where: { email_usuario: req.body.email_usuario }
@@ -51,6 +52,7 @@ export const crearUsuario = async (req, res) => {
           nombre_usuario: req.body.nombre_usuario,
           email_usuario: req.body.email_usuario,
           nick_usuario: req.body.nick_usuario,
+          perfil_usuario: req.file.filename,
           createdAt: req.body.createdAt,
           updatedAt: req.body.updatedAt
         },
@@ -59,6 +61,7 @@ export const crearUsuario = async (req, res) => {
             'nombre_usuario',
             'nick_usuario',
             'email_usuario',
+            'perfil_usuario',
             'createdAt',
             'updatedAt'
           ]

@@ -1,20 +1,29 @@
 import { useParams } from 'react-router-dom'
-import { Container, Col, Row } from 'react-bootstrap'
+import { Container, Col, Row, Button, Modal } from 'react-bootstrap'
 import { Sidebar } from '../../components/Sidebar/Sidebar'
 import Photo from '../../assets/profile.jpg'
 import Post from '../../assets/eiffel.jpg'
 import axios from 'axios'
 
 import './Profile.css'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 const Profile = () => {
   let { nickname } = useParams()
   let datta = JSON.parse(localStorage.getItem('userLogged'))
   const [posts, setPosts] = useState([])
+  const [follows, setFollows] = useState([])
+  const [followings, setFollowings] = useState([])
   const [statePosts, setStatePosts] = useState(false)
   const [load, setLoad] = useState(false)
   const [userProfile, setUserProfile] = useState([])
+  const [showFollows, setShowFollows] = useState(false)
+  const [showFollowings, setShowFollowings] = useState(false)
+
+  const handleCloseFollows = () => setShowFollows(false)
+  const handleShowFollows = () => setShowFollows(true)
+  const handleCloseFollowings = () => setShowFollowings(false)
+  const handleShowFollowings = () => setShowFollowings(true)
 
   const obtenerPerfilUsuario = async e => {
     const response = await axios
@@ -38,7 +47,7 @@ const Profile = () => {
     return nickname.data.nick_usuario
   }
 
-  const obtenerPosts = async () => {
+  const obtenerPosts = async ()  => {
     try {
       let response = await axios.get(
         `http://localhost:8000/.netlify/functions/api/posts/${nickname}`
@@ -46,15 +55,17 @@ const Profile = () => {
 
       if (response.status === 200) {
         console.log(response.data)
-        let nick = await obtenerNick(response.data[0].id_user)
+        let nick = await obtenerNick(response.data.posts[0].id_user)
 
         setPosts([])
         setStatePosts(true)
-        console.log(response.data)
-        response.data.forEach(element => {
+        response.data.posts.forEach(element => {
           element.nick = nick
           setPosts(posts => [...posts, element])
         })
+        setFollows(response.data.follows)
+        setFollowings(response.data.followings)
+
         return true
       }
       return false
@@ -84,18 +95,39 @@ const Profile = () => {
             <Row className='stats-profile'>
               <Col sm={4} md={4} lg={3} xl={2} xxl={2} className='stat'>
                 <p>
-                  <b>3</b> posts
+                  <b>{posts.length}</b> posts
                 </p>
               </Col>
               <Col sm={4} md={4} lg={3} xl={2} xxl={2} className='stat'>
-                <p>
-                  <b>3</b> followers
+                <p onClick={handleShowFollows}>
+                  <b>{follows.length}</b> followers
                 </p>
+
+                <Modal show={showFollows} onHide={handleCloseFollows}>
+                  <Modal.Header closeButton>
+                    <Modal.Title>Followers</Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body>
+                    {follows.map((follow, index) => (
+                      <p key={index}>{follow.nick_usuario_follower}</p>
+                    ))}
+                  </Modal.Body>
+                </Modal>
               </Col>
               <Col sm={4} md={4} lg={3} xl={2} xxl={2} className='stat'>
-                <p>
-                  <b>3</b> followings
+                <p onClick={handleShowFollowings}>
+                  <b>{followings.length}</b> followings
                 </p>
+                <Modal show={showFollowings} onHide={handleCloseFollowings}>
+                  <Modal.Header closeButton>
+                    <Modal.Title>Followings</Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body>
+                    {followings.map((follow, index) => (
+                      <p key={index}>{follow.nick_usuario_following}</p>
+                    ))}
+                  </Modal.Body>
+                </Modal>
               </Col>
             </Row>
             <h3>Nicolas</h3>

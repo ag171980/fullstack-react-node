@@ -2,6 +2,7 @@
 
 import { EmptyResultError } from 'sequelize'
 import PostModel from '../models/PostModel.js'
+import FollowerModel from '../models/FollowerModel.js'
 /* METODOS DEL CRUD */
 //MOSTRAR TODOS LOS REGISTROS
 export const getAllPosts = async (req, res) => {
@@ -22,13 +23,53 @@ export const getPostById = async (req, res) => {
 }
 
 export const getPostsByIdUser = async (req, res) => {
+  let response = {
+    posts: [],
+    follows: [],
+    followings: []
+  }
   try {
     const posts = await PostModel.findAll({
       where: {
         nick_usuario: req.params.nickname
       }
     })
-    res.json(posts)
+    const followings = await FollowerModel.findAll({
+      where: {
+        nick_usuario_follower: req.params.nickname
+      }
+    })
+    const follows = await FollowerModel.findAll({
+      where: {
+        nick_usuario_following: req.params.nickname
+      }
+    })
+    response.posts = posts
+    response.follows = follows
+    response.followings = followings
+    res.json(response)
+  } catch (error) {
+    res.json({ message: error.message })
+  }
+}
+
+export const showPostsFromUsersIFollow = async (req, res) => {
+  let postsResp = []
+  try {
+    const followings = await FollowerModel.findAll({
+      attributes: ['nick_usuario_following'],
+      where: {
+        nick_usuario_follower: req.params.nickname
+      }
+    })
+    for (let i = 0; i < followings.length; i++) {
+      const posts = await PostModel.findAll({
+        where: { nick_usuario: followings[i].nick_usuario_following }
+      })
+      postsResp.push(posts[0])
+    }
+
+    res.json(postsResp)
   } catch (error) {
     res.json({ message: error.message })
   }

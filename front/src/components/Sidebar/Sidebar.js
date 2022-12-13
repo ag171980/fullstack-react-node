@@ -28,7 +28,7 @@ export const Sidebar = () => {
       updatedAt: todayDate,
       nick_usuario: datta.nick_usuario
     }
-
+    console.log(data)
     await axios
       .post('http://localhost:8000/.netlify/functions/api/crearPost', data, {
         headers: {
@@ -88,14 +88,14 @@ export const Sidebar = () => {
           <AiOutlineSearch />
           <Link to='/search'>Search</Link>
         </div>
-        <div className='link'>
+        {/* <div className='link'>
           <BiMessageAlt />
           <Link to='/messages'>Messages</Link>
-        </div>
-        <div className='link'>
+        </div> */}
+        {/* <div className='link'>
           <FaUserFriends />
           <Link to='/friends'>Friends</Link>
-        </div>
+        </div> */}
         <div className='link'>
           <CgProfile />
           <Link to={`/${datta.nick_usuario}`}>My Profile</Link>

@@ -1,27 +1,27 @@
 .post {
-    width: 450px;
-    border: 1px solid #C8C8C8;
-    border-radius: 5px;
-    background-color: white;
-    margin: 20px auto;
+  width: 450px;
+  border: 1px solid #c8c8c8;
+  border-radius: 5px;
+  background-color: white;
+
+  margin: 20px auto;
 }
 
 .data-poster {
-    display: flex;
-    align-items: center;
-    height: 100%;
+  display: flex;
+  align-items: center;
+  height: 100%;
 }
 
 .data-poster p {
-    vertical-align: middle;
-    margin: 0;
+  vertical-align: middle;
+  margin: 0;
 }
 
 .profile {
-    height: 30px;
-    border-radius: 50%;
+  height: 30px;
+  border-radius: 50%;
 }
-
 .image-post {
-    width: 100%;
+  width: 100% !important;
 }

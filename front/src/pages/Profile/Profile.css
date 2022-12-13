@@ -8,17 +8,18 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  min-height: 50vh;
 }
 .image-post {
   height: 320px;
   width: 320px;
   margin: 10px auto;
 }
-.description-profile h1{
-    font-size: 23px;
+.description-profile h1 {
+  font-size: 23px;
 }
-.description-profile h3{
-    font-size: 19px;
+.description-profile h3 {
+  font-size: 19px;
 }
 
 @media (max-width: 1400px) {
@@ -42,6 +43,18 @@
 }
 
 @media (max-width: 576px) {
+  .description-profile h1 {
+    text-align: center;
+    padding: 10px 0;
+  }
+  .stats-profile {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
+  .stats-profile .stat {
+    width: auto;
+  }
   .posts-profile {
     display: grid;
     grid-template-columns: auto auto auto;

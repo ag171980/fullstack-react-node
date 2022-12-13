@@ -1,0 +1,88 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.buscador {
+  position: relative;
+}
+
+.inputBuscador {
+  padding: 10px 15px;
+  border-radius: 30px;
+  border: none;
+  outline: none;
+  border: 1px solid #c5c5c5;
+  width: 100%;
+  margin: 15px auto;
+  transition: 0.5s all;
+}
+
+.inputBuscador:focus {
+  outline: 1px solid #a0a0a0;
+}
+
+.custom-loader {
+  position: absolute;
+  top: 38%;
+  right: 15px;
+  width: 20px;
+  height: 20px;
+  display: grid;
+  border-radius: 50%;
+  -webkit-mask: radial-gradient(farthest-side, #0000 40%, #000 41%);
+  background: linear-gradient(0deg, #766df480 50%, #766df4ff 0) center/2px 100%,
+    linear-gradient(90deg, #766df440 50%, #766df4bf 0) center/100% 2px;
+  background-repeat: no-repeat;
+  animation: s3 1s infinite steps(12);
+}
+.custom-loader::before,
+.custom-loader::after {
+  content: '';
+  grid-area: 1/1;
+  border-radius: 50%;
+  background: inherit;
+  opacity: 0.915;
+  transform: rotate(30deg);
+}
+.custom-loader::after {
+  opacity: 0.83;
+  transform: rotate(60deg);
+}
+
+@keyframes s3 {
+  100% {
+    transform: rotate(1turn);
+  }
+}
+
+.user {
+  background-color: white;
+  border-radius: 10px;
+  padding: 4px 15px;
+  margin: 10px 0;
+  box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.1);
+  -webkit-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.1);
+  -moz-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.1);
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.user .photo-user {
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+}
+.user .info-user {
+  padding: 0 10px;
+}
+.user h4 {
+  font-size: 18px;
+  margin: 0;
+}
+.user p {
+  font-size: 14px;
+  margin: 0;
+}

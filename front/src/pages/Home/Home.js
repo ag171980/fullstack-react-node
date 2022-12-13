@@ -25,36 +25,36 @@ const Home = () => {
   const handleClose = () => setShow(false)
   const handleShow = () => setShow(true)
 
-  const obtenerNick = async idUsuario => {
-    const nickname = await axios.get(
-      `http://localhost:8000/.netlify/functions/api/users/${idUsuario}`
-    )
-    return nickname.data.nick_usuario
-  }
+  // const obtenerNick = async idUsuario => {
+  //   const nickname = await axios.get(
+  //     `http://localhost:8000/.netlify/functions/api/users/${idUsuario}`
+  //   )
+  //   return nickname.data.nick_usuario
+  // }
 
-  const obtenerPosts = async () => {
-    try {
-      let response = await axios.get(
-        `http://localhost:8000/.netlify/functions/api/posts/${datta.id}`
-      )
+  // const obtenerPosts = async () => {
+  //   try {
+  //     let response = await axios.get(
+  //       `http://localhost:8000/.netlify/functions/api/posts/${datta.id}`
+  //     )
 
-      if (response.status === 200) {
-        let nick = await obtenerNick(response.data[0].id_user)
+  //     if (response.status === 200) {
+  //       let nick = await obtenerNick(response.data[0].id_user)
 
-        setPosts([])
-        setStatePosts(true)
-        response.data.forEach(element => {
-          element.nick = nick
-          setPosts(posts => [...posts, element])
-        })
-        return true
-      }
-      return false
-    } catch (err) {
-      console.error(err)
-      return false
-    }
-  }
+  //       setPosts([])
+  //       setStatePosts(true)
+  //       response.data.forEach(element => {
+  //         element.nick = nick
+  //         setPosts(posts => [...posts, element])
+  //       })
+  //       return true
+  //     }
+  //     return false
+  //   } catch (err) {
+  //     console.error(err)
+  //     return false
+  //   }
+  // }
   const crearPost = async e => {
     e.preventDefault()
     var todayDate = new Date().toISOString().slice(0, 10)
@@ -75,7 +75,7 @@ const Home = () => {
       })
       .then(res => {
         // console.log(res.data)
-        obtenerPosts()
+        // obtenerPosts()
         // setTimeout(() => {
         //     if (res.status === 200 && !res.data.message) {
         //         document.querySelector(".loading").innerHTML = `
@@ -104,7 +104,7 @@ const Home = () => {
   }
 
   if (!statePosts) {
-    obtenerPosts()
+    // obtenerPosts()
   }
   return (
     <div className='Home'>

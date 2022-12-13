@@ -13,7 +13,7 @@ router.use(bodyParser.json());
 router.use(cors());
 router.get("/posts", getAllPosts)
 router.get("/post/:id", getPostById)
-router.get("/posts/:idUser", getPostsByIdUser)
+router.get("/posts/:nickname", getPostsByIdUser)
 
 router.post("/crearPost", upload.single("imagen_post"), crearPost)
 

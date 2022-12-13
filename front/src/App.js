@@ -66,7 +66,7 @@ function App() {
   // }, [stateBlogs])
 
   return (
-    <div style={{background:"#ebf7ff"}}>
+    <div style={{background:"#ebf7ff", minHeight:"100vh"}}>
       <RouterPage />
     </div>
   );

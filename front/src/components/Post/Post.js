@@ -23,8 +23,7 @@ const Post = ({ post }) => {
   if (!loadData) {
     obtenerDataUsuario(post.id_user)
   }
-  useEffect(() => {
-  }, [userDataPost])
+  useEffect(() => {}, [userDataPost])
 
   return (
     <div className='post'>
@@ -36,7 +35,12 @@ const Post = ({ post }) => {
               className='profile'
             />
           )}
-          <p className='mx-2'>{post.nick_usuario}</p>
+          <Link
+            to={`/${post.nick_usuario}`}
+            className='text-decoration-none text-dark'
+          >
+            <p className='mx-2'>{post.nick_usuario}</p>
+          </Link>
         </div>
         <div className='actions-post'></div>
       </div>
@@ -48,7 +52,12 @@ const Post = ({ post }) => {
       </div>
       <div className='footer-post p-2'>
         <b>
-          <p>{post.nick_usuario}</p>
+          <Link
+            to={`/${post.nick_usuario}`}
+            className='text-decoration-none text-dark'
+          >
+            <p>{post.nick_usuario}</p>
+          </Link>
         </b>
         {/* <Link to={`/users/${id}`}>
                     <b><p>Johny Foons</p></b>

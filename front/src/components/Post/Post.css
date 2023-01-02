@@ -4,6 +4,7 @@
   border-radius: 5px;
   background-color: white;
 
+  object-fit: cover;
   margin: 20px auto;
 }
 
@@ -19,8 +20,10 @@
 }
 
 .profile {
-  height: 30px;
+  height: 35px;
+  width: 35px;
   border-radius: 50%;
+  object-fit: cover;
 }
 .image-post {
   width: 100% !important;

@@ -119,9 +119,8 @@ const Profile = () => {
                 ? require(`../../profiles/${userProfile.perfil_usuario}`)
                 : Default
             }
-            height='150'
-            width='150'
-            className='rounded-circle'
+            
+            className='rounded-circle image-profile'
           />
         </Col>
         <Col sm={8} md={7} lg={7} xl={7} xxl={6}>

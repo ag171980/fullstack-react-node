@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import axios from 'axios'
 import { Link } from 'react-router-dom'
-import Logo from '../../assets/logo.png'
 
 import { AiOutlineHome, AiOutlineSearch } from 'react-icons/ai'
 import { BiMessageAlt, BiLogOut, BiAddToQueue } from 'react-icons/bi'
@@ -36,34 +35,15 @@ export const Sidebar = () => {
         }
       })
       .then(res => {
-        setStateAlert(true)
-        // console.log(res.data)
-        // obtenerPosts()
-        // setTimeout(() => {
-        //     if (res.status === 200 && !res.data.message) {
-        //         document.querySelector(".loading").innerHTML = `
-        //     <div className="message-response">
-        //         <p>Iniciaste sesion correctamente!</p>
-        //     </div>
-        //     `
-        //         localStorage.setItem("userLogged", JSON.stringify(res.data))
-        //     } else {
-        //         document.querySelector(".loading").innerHTML = `
-        //     <div className="message-response">
-        //         <p>${res.data.message}</p>
-        //     </div>
-        //     `
-        //     }
-        //     setTimeout(() => {
-        //         document.querySelector(".loading").classList.remove("show")
-        //         window.location.href = "/home"
-        //     }, 2000);
-        // }, 2000);
+        setTimeout(() => {
+          setShow(false)
+        }, 1500)
       })
       .catch(err => {
         console.error(err)
       })
   }
+
   const handleClose = () => setShow(false)
   const handleShow = () => setShow(true)
 
@@ -96,10 +76,6 @@ export const Sidebar = () => {
           <FaUserFriends />
           <Link to='/friends'>Friends</Link>
         </div> */}
-        <div className='link'>
-          <CgProfile />
-          <Link to={`/${datta.nick_usuario}`}>My Profile</Link>
-        </div>
         <div className='link'>
           <BiLogOut />
 
@@ -141,6 +117,15 @@ export const Sidebar = () => {
             </Form>
           </Modal.Body>
         </Modal>
+        <div className='link'>
+          <img
+            src={require(`../../profiles/${datta.perfil_usuario}`)}
+            height='30'
+            width='30'
+            style={{ borderRadius: '15px' }}
+          />
+          <Link to={`/${datta.nick_usuario}`}> Profile</Link>
+        </div>
       </div>
     </div>
   )

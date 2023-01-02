@@ -1,22 +1,26 @@
-import { useParams } from 'react-router-dom'
-import { Container, Col, Row, Button, Modal } from 'react-bootstrap'
-import { Sidebar } from '../../components/Sidebar/Sidebar'
-import Photo from '../../assets/profile.jpg'
-import Post from '../../assets/eiffel.jpg'
-import axios from 'axios'
-
-import './Profile.css'
 import { useState, useEffect } from 'react'
+import { useParams } from 'react-router-dom'
+//component(s)
+import { Sidebar } from '../../components/Sidebar/Sidebar'
+import { Container, Col, Row, Button, Modal } from 'react-bootstrap'
+//media
+import Default from '../../assets/default.jpg'
+//api
+import { obtenerPostsPorNickname, obtenerNickPorId } from '../../api/posts'
+import { seguirUsuarioPorNick, noSeguirUsuarioPorNick } from '../../api/users'
+//style
+import './Profile.css'
 
 const Profile = () => {
   let { nickname } = useParams()
-  let datta = JSON.parse(localStorage.getItem('userLogged'))
+  const datta = JSON.parse(localStorage.getItem('userLogged'))
+
   const [posts, setPosts] = useState([])
+  const [followUser, setFollowUser] = useState(false)
   const [follows, setFollows] = useState([])
   const [followings, setFollowings] = useState([])
   const [statePosts, setStatePosts] = useState(false)
-  const [load, setLoad] = useState(false)
-  const [userProfile, setUserProfile] = useState([])
+  const [userProfile, setUserProfile] = useState({})
   const [showFollows, setShowFollows] = useState(false)
   const [showFollowings, setShowFollowings] = useState(false)
 
@@ -25,44 +29,27 @@ const Profile = () => {
   const handleCloseFollowings = () => setShowFollowings(false)
   const handleShowFollowings = () => setShowFollowings(true)
 
-  const obtenerPerfilUsuario = async e => {
-    const response = await axios
-      .get('http://localhost:8000/.netlify/functions/api/profileUserById', {
-        params: { nickname: nickname }
-      })
-      .then(res => {
-        console.log(res.data)
-        // setUserProfile()
-        setLoad(true)
-      })
-      .catch(err => {
-        console.error(err)
-      })
-  }
-
   const obtenerNick = async idUsuario => {
-    const nickname = await axios.get(
-      `http://localhost:8000/.netlify/functions/api/users/${idUsuario}`
-    )
+    const nickname = await obtenerNickPorId(idUsuario)
     return nickname.data.nick_usuario
   }
 
-  const obtenerPosts = async ()  => {
+  const obtenerPosts = async () => {
     try {
-      let response = await axios.get(
-        `http://localhost:8000/.netlify/functions/api/posts/${nickname}`
-      )
+      let response = await obtenerPostsPorNickname(nickname)
 
       if (response.status === 200) {
         console.log(response.data)
-        let nick = await obtenerNick(response.data.posts[0].id_user)
-
-        setPosts([])
+        if (response.data.posts.length !== 0) {
+          let nick = await obtenerNick(response.data.posts[0].id_user)
+          setPosts([])
+          response.data.posts.forEach(element => {
+            element.nick = nick
+            setPosts(posts => [...posts, element])
+          })
+        }
         setStatePosts(true)
-        response.data.posts.forEach(element => {
-          element.nick = nick
-          setPosts(posts => [...posts, element])
-        })
+        setUserProfile(response.data.dataUser)
         setFollows(response.data.follows)
         setFollowings(response.data.followings)
 
@@ -75,23 +62,105 @@ const Profile = () => {
     }
   }
 
-  if (!load) {
-    // obtenerPerfilUsuario()
+  const seguirUsuario = async (nick_usuarioA, nick_usuarioB) => {
+    try {
+      const todayDate = new Date().toISOString().slice(0, 10)
+      const body = {
+        nick_usuarioA: nick_usuarioA,
+        nick_usuarioB: nick_usuarioB,
+        createdAt: todayDate,
+        updatedAt: todayDate
+      }
+      const response = await seguirUsuarioPorNick(body)
+      if (response.status === 200) {
+        setFollowUser(true)
+        obtenerPosts()
+      }
+    } catch (err) {
+      console.error(err)
+    }
   }
+
+  const noSeguirUsuario = async (nick_usuarioA, nick_usuarioB) => {
+    try {
+      var todayDate = new Date().toISOString().slice(0, 10)
+      const body = {
+        nick_usuarioA: nick_usuarioA,
+        nick_usuarioB: nick_usuarioB,
+        createdAt: todayDate,
+        updatedAt: todayDate
+      }
+      const response = await noSeguirUsuarioPorNick(body)
+      if (response.status === 200) {
+        setFollowUser(false)
+        obtenerPosts()
+      }
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
   if (!statePosts) {
     obtenerPosts()
   }
+
+  useEffect(() => {
+    // console.log(userProfile)
+  }, [userProfile])
 
   return (
     <Container>
       <Sidebar />
       <Row className='header-profile py-5'>
         <Col sm={4} md={5} lg={5} xl={5} xxl={5} className='m-auto text-center'>
-          <img src={Photo} height='150' className='rounded-circle' />
+          <img
+            src={
+              userProfile.perfil_usuario
+                ? require(`../../profiles/${userProfile.perfil_usuario}`)
+                : Default
+            }
+            height='150'
+            width='150'
+            className='rounded-circle'
+          />
         </Col>
-        <Col sm={8} md={7} lg={7} xl={7} xxl={7}>
+        <Col sm={8} md={7} lg={7} xl={7} xxl={6}>
           <div className='description-profile'>
-            <h1>@{nickname}</h1>
+            <Row>
+              <Col sm={4} md={4} lg={3} xl={3} xxl={4}>
+                <h1>@{userProfile.nick_usuario}</h1>
+              </Col>
+              {datta.nick_usuario !== userProfile.nick_usuario && (
+                <Col sm={4} md={4} lg={3} xl={3} xxl={4}>
+                  {!followUser && (
+                    <Button
+                      variant='primary'
+                      onClick={() =>
+                        seguirUsuario(
+                          datta.nick_usuario,
+                          userProfile.nick_usuario
+                        )
+                      }
+                    >
+                      Follow
+                    </Button>
+                  )}
+                  {followUser && (
+                    <Button
+                      variant='primary'
+                      onClick={() =>
+                        noSeguirUsuario(
+                          datta.nick_usuario,
+                          userProfile.nick_usuario
+                        )
+                      }
+                    >
+                      Unfollow
+                    </Button>
+                  )}
+                </Col>
+              )}
+            </Row>
             <Row className='stats-profile'>
               <Col sm={4} md={4} lg={3} xl={2} xxl={2} className='stat'>
                 <p>
@@ -130,8 +199,8 @@ const Profile = () => {
                 </Modal>
               </Col>
             </Row>
-            <h3>Nicolas</h3>
-            <p className='description'>22 anios Dev Frontend Ing en Sistemas</p>
+            <h3>{userProfile.nombre_usuario}</h3>
+            {/* <p className='description'>22 anios Dev Frontend Ing en Sistemas</p> */}
           </div>
         </Col>
       </Row>

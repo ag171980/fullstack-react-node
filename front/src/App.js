@@ -1,14 +1,11 @@
 import { useEffect, useState } from 'react'
-import './App.css';
-import axios from 'axios';
+import './App.css'
+import axios from 'axios'
 
 import Post from './components/Post/Post'
 
-import RouterPage from './router/RouterPage';
-function App() {
-  
-
-  
+import RouterPage from './router/RouterPage'
+function App () {
   // const [blogs, setBlogs] = useState([]);
   // const [stateBlogs, setStateBlogs] = useState(false);
 
@@ -30,7 +27,6 @@ function App() {
   //     return false;
   //   }
   // }
-
 
   // const sendBlogs = async (data) => {
   //   const resp = await axios.post("http://localhost:8000/createBlog", data)
@@ -59,17 +55,21 @@ function App() {
   // const mostrarBlogs = async () => {
   //   await getBlogs()
 
-
   // }
 
   // useEffect(() => {
   // }, [stateBlogs])
 
   return (
-    <div style={{background:"#ebf7ff", minHeight:"100vh"}}>
+    <div
+      style={{
+        background: '#ebf7ff',
+        minHeight: '100vh'
+      }}
+    >
       <RouterPage />
     </div>
-  );
+  )
 }
 
-export default App;
+export default App

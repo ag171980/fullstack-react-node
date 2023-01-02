@@ -1,24 +1,28 @@
-import axios from 'axios'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Container, Row, Col } from 'react-bootstrap'
+//component(s)
 import { Sidebar } from '../../components/Sidebar/Sidebar'
-
+import { Container, Row, Col } from 'react-bootstrap'
+//media
 import PhotoDefault from '../../assets/default.jpg'
-
+//api
+import { buscarPorNick } from '../../api/api'
+//style
 import './Search.css'
+
 const Search = () => {
-  let datta = JSON.parse(localStorage.getItem('userLogged'))
+  const datta = JSON.parse(localStorage.getItem('userLogged'))
   const [loader, setLoader] = useState(false)
   const [usersFound, setUsersFound] = useState([])
   const [userToSearch, setUserToSearch] = useState('')
+
   const searchUserByNickname = async userToSearch => {
-    const response = await axios.get(
-      `http://localhost:8000/.netlify/functions/api/findByNickname/${userToSearch}`
-    )
-    if (response.status === 200) {
-      setUsersFound(response.data)
-      console.log(response.data)
+    if (userToSearch.length > 0) {
+      const response = await buscarPorNick(userToSearch)
+      if (response.status === 200) {
+        setUsersFound(response.data)
+        console.log(response.data)
+      }
     }
   }
 
@@ -58,15 +62,27 @@ const Search = () => {
         <Col xxl={10}>
           {usersFound &&
             usersFound.map(
-              user =>
+              (user, index) =>
                 user.nick_usuario !== datta.nick_usuario && (
-                  <div className='user'>
-                    <img src={PhotoDefault} className='photo-user' />
-                    <Link to={`/${user.nick_usuario}`} className='info-user'>
+                  <Link
+                    to={`/${user.nick_usuario}`}
+                    className='user'
+                    key={index}
+                  >
+                    <img
+                      src={
+                        user.perfil_usuario
+                          ? require(`../../profiles/${user.perfil_usuario}`)
+                          : PhotoDefault
+                      }
+                      alt={`profile of ${user.perfil_usuario}`}
+                      className='photo-user'
+                    />
+                    <div className='info-user'>
                       <h4>{user.nick_usuario}</h4>
                       <p>{user.nombre_usuario}</p>
-                    </Link>
-                  </div>
+                    </div>
+                  </Link>
                 )
             )}
           {usersFound.length === 0 && (

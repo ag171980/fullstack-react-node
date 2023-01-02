@@ -3,7 +3,9 @@
   padding: 0;
   box-sizing: border-box;
 }
-
+.header-profile img {
+  border: 1px solid #e7e7e7;
+}
 .posts-profile {
   display: flex;
   justify-content: center;

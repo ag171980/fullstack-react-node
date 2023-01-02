@@ -3,6 +3,7 @@
 import { EmptyResultError } from 'sequelize'
 import PostModel from '../models/PostModel.js'
 import FollowerModel from '../models/FollowerModel.js'
+import UserModel from '../models/UserModel.js'
 /* METODOS DEL CRUD */
 //MOSTRAR TODOS LOS REGISTROS
 export const getAllPosts = async (req, res) => {
@@ -25,6 +26,7 @@ export const getPostById = async (req, res) => {
 export const getPostsByIdUser = async (req, res) => {
   let response = {
     posts: [],
+    dataUser: {},
     follows: [],
     followings: []
   }
@@ -34,6 +36,19 @@ export const getPostsByIdUser = async (req, res) => {
         nick_usuario: req.params.nickname
       }
     })
+
+    const user = await UserModel.findAll({
+      attributes: [
+        'nombre_usuario',
+        'nick_usuario',
+        'email_usuario',
+        'perfil_usuario'
+      ],
+      where: {
+        nick_usuario: req.params.nickname
+      }
+    })
+
     const followings = await FollowerModel.findAll({
       where: {
         nick_usuario_follower: req.params.nickname
@@ -44,9 +59,14 @@ export const getPostsByIdUser = async (req, res) => {
         nick_usuario_following: req.params.nickname
       }
     })
+    response.dataUser.nombre_usuario = user[0].nombre_usuario
+    response.dataUser.nick_usuario = user[0].nick_usuario
+    response.dataUser.email_usuario = user[0].email_usuario
+    response.dataUser.perfil_usuario = user[0].perfil_usuario
     response.posts = posts
     response.follows = follows
     response.followings = followings
+
     res.json(response)
   } catch (error) {
     res.json({ message: error.message })
@@ -54,6 +74,7 @@ export const getPostsByIdUser = async (req, res) => {
 }
 
 export const showPostsFromUsersIFollow = async (req, res) => {
+  console.log(req.params.nickname)
   let postsResp = []
   try {
     const followings = await FollowerModel.findAll({
@@ -62,11 +83,14 @@ export const showPostsFromUsersIFollow = async (req, res) => {
         nick_usuario_follower: req.params.nickname
       }
     })
+
     for (let i = 0; i < followings.length; i++) {
       const posts = await PostModel.findAll({
         where: { nick_usuario: followings[i].nick_usuario_following }
       })
-      postsResp.push(posts[0])
+      for (let j = 0; j < posts.length; j++) {
+        postsResp.push(posts[j])
+      }
     }
 
     res.json(postsResp)

@@ -5,6 +5,8 @@ import {
   getAllUsers,
   getUserById,
   findByNickname,
+  followUserByNickname,
+  unfollowUserByNickname,
   crearUsuario,
   validarUsuario
 } from '../controllers/userController.js'
@@ -21,6 +23,8 @@ router.get('/users', getAllUsers)
 router.get('/users/:id', getUserById)
 router.get('/findByNickname/:nickname', findByNickname)
 
+router.post('/users/followUserByNickname', followUserByNickname)
+router.post('/users/unfollowUserByNickname', unfollowUserByNickname)
 router.post('/crearUsuario', upload.single('perfil_usuario'), crearUsuario)
 router.post('/validarUsuario', validarUsuario)
 

@@ -1,80 +1,86 @@
-import axios from "axios";
-import { Button, Form, Container } from "react-bootstrap";
+import { useState } from 'react'
+import { validarUsuario } from '../../api/api'
+import { Link, useNavigate } from 'react-router-dom'
+import { Button, Form, Container } from 'react-bootstrap'
 
 const Login = () => {
-    const validarUsuario = async (e) => {
-        e.preventDefault();
-        document.querySelector(".loading").classList.add("show")
+  const navigate = useNavigate()
 
-        //toma de datos
-        let data = {
-            nick_usuario: document.querySelector("#nick_usuario").value,
-            email_usuario: document.querySelector("#email_usuario").value,
-        }
-        //registro de datos
-        const resp = await axios.post("http://localhost:8000/.netlify/functions/api/validarUsuario", data)
-            .then((res) => {
-                console.log(res.data)
-                setTimeout(() => {
-                    if (res.status === 200 && !res.data.message) {
-                        document.querySelector(".loading").innerHTML = `
-                        <div className="message-response">
-                            <p>Iniciaste sesion correctamente!</p>
-                        </div>
-                        `
+  const Swal = require('sweetalert2')
+  const [message, setMessage] = useState('Iniciaste sesion correctamente')
+  const [loading, setLoading] = useState(false)
 
-                        localStorage.setItem("userLogged", JSON.stringify(res.data))
-                    } else {
-                        document.querySelector(".loading").innerHTML = `
-                        <div className="message-response">
-                            <p>${res.data.message}</p>
-                        </div>
-                        `
-                    }
-                    setTimeout(() => {
-                        document.querySelector(".loading").classList.remove("show")
-                        window.location.href = "/home"
-                    }, 2000);
-                }, 2000);
-            })
-            .catch((err) => {
-                console.error(err)
-            })
+  const handleForm = async e => {
+    e.preventDefault()
+    setLoading(true)
+
+    //toma de datos
+    let data = {
+      nick_usuario: document.querySelector('#nick_usuario').value,
+      email_usuario: document.querySelector('#email_usuario').value
     }
+    //registro de datos
+    await validarUsuario(data)
+      .then(res => {
+        console.log(res.data)
+        setTimeout(() => {
+          if (res.data.message) {
+            setMessage(res.data.message)
+          }
+          if (res.status === 200) {
+            setLoading(false)
+            Swal.fire({
+              text: message,
+              icon:
+                message === 'Iniciaste sesion correctamente'
+                  ? 'success'
+                  : 'error'
+            })
+            localStorage.setItem('userLogged', JSON.stringify(res.data))
+          }
+          setTimeout(() => {
+            if (!res.data.message) {
+              Swal.close()
+              navigate('/home')
+            }
+          }, 2000)
+        }, 2000)
+      })
+      .catch(err => {
+        console.error(err)
+      })
+  }
 
-    return (
-        <Container className="login pt-4 pl-3 pr-3 col-3">
-            <h1 className="text-center">Meety</h1>
-            <Form onSubmit={validarUsuario}>
-                <div className="loading">
-                    <div className="lds-dual-ring"></div>
-                </div>
-                <Form.Group className="mb-3" controlId="email_usuario">
-                    <Form.Label>Email</Form.Label>
-                    <Form.Control type="email" placeholder="joe@123.com" required />
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="nick_usuario">
-                    <Form.Label>Nickname</Form.Label>
-                    <Form.Control type="text" placeholder="JoeDoe21" required />
-                </Form.Group>
+  return (
+    <Container className='login pt-4 pl-3 pr-3 col-3'>
+      <h1 className='text-center'>Meety</h1>
+      <Form onSubmit={handleForm}>
+        {loading && (
+          <div className='loading'>
+            <div className='lds-dual-ring'></div>
+          </div>
+        )}
+        <Form.Group className='mb-3' controlId='email_usuario'>
+          <Form.Label>Email</Form.Label>
+          <Form.Control type='email' placeholder='joe@123.com' required />
+        </Form.Group>
+        <Form.Group className='mb-3' controlId='nick_usuario'>
+          <Form.Label>Nickname</Form.Label>
+          <Form.Control type='text' placeholder='JoeDoe21' required />
+        </Form.Group>
 
-
-                <Button variant="primary" type="submit" className="button btn-block w-100 mt-2">
-                    Iniciar Sesion
-                </Button>
-            </Form>
-            {/* <form className="formulario_ingreso" onSubmit={validarUsuario}>
-            <div className="loading">
-                <div className="lds-dual-ring"></div>
-            </div>
-            <h2>Inicia Sesion</h2>
-            <label htmlFor="nick_usuario">Nombre de usuario</label>
-            <input type="text" name="nick_usuario" id="nick_usuario" required />
-            <label htmlFor="email_usuario">Email</label>
-            <input type="email" name="email_usuario" id="email_usuario" required />
-            <button type="submit">Iniciar Sesion</button>
-        </form> */}
-        </Container>
-    )
+        <Button
+          variant='primary'
+          type='submit'
+          className='button btn-block w-100 mt-2'
+        >
+          Iniciar Sesion
+        </Button>
+        <div className='text-center my-3'>
+          <Link to='/'>o Registrate</Link>
+        </div>
+      </Form>
+    </Container>
+  )
 }
-export default Login;
+export default Login
